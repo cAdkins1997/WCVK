@@ -32,7 +32,7 @@ The virtual position of a monitor is in
 video mode, describes the viewports that the connected monitors provide into the
 virtual desktop that spans them.
 
-To see how GLFW views your monitor setup and its available video modes, run the
+To see how GLFW views your monitor createInstance and its available video modes, run the
 `monitors` test program.
 
 

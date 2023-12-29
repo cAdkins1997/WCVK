@@ -4,9 +4,15 @@ project(OVKL)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(OVKL main.cpp
-        common.h
-        Engine.cpp
-        Engine.h
+        vulkan/VulkanCommon.h
+        vulkan/Engine.cpp
+        vulkan/Engine.h
+        vulkan/Debug.cpp
+        vulkan/Debug.h
+        vulkan/Device.cpp
+        vulkan/Device.h
+        vulkan/Instance.cpp
+        vulkan/Instance.h
 )
 
 find_package(Vulkan REQUIRED)

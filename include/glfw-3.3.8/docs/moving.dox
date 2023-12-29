@@ -203,7 +203,7 @@ glfwGetWindowSize(&width, &height);
 glViewport(0, 0, width, height);
 @endcode
 
-@par New basic viewport setup
+@par New basic viewport createInstance
 @code
 glfwGetFramebufferSize(window, &width, &height);
 glViewport(0, 0, width, height);

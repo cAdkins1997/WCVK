@@ -1102,7 +1102,7 @@ NK_API void nk_input_end(struct nk_context*);
 /// cfg.global_alpha = 1.0f;
 /// cfg.null = dev->null;
 /// //
-/// // setup buffers and convert
+/// // createInstance buffers and convert
 /// struct nk_buffer cmds, verts, idx;
 /// nk_buffer_init_default(&cmds);
 /// nk_buffer_init_default(&verts);
@@ -3901,7 +3901,7 @@ struct nk_font_config {
     const nk_rune *range;
     /* list of unicode ranges (2 values per range, zero terminated) */
     struct nk_baked_font *font;
-    /* font to setup in the baking process: NOTE: not needed for font atlas */
+    /* font to createInstance in the baking process: NOTE: not needed for font atlas */
     nk_rune fallback_glyph;
     /* fallback glyph to use if a given rune is not found */
     struct nk_font_config *n;
@@ -12627,7 +12627,7 @@ nk_font_baker(void *memory, int glyph_count, int count, struct nk_allocator *all
 {
     struct nk_font_baker *baker;
     if (!memory) return 0;
-    /* setup baker inside a memory block  */
+    /* createInstance baker inside a memory block  */
     baker = (struct nk_font_baker*)NK_ALIGN_PTR(memory, nk_baker_align);
     baker->build = (struct nk_font_bake_data*)NK_ALIGN_PTR((baker + 1), nk_build_align);
     baker->packed_chars = (struct nk_tt_packedchar*)NK_ALIGN_PTR((baker->build + count), nk_char_align);
@@ -12664,7 +12664,7 @@ nk_font_bake_pack(struct nk_font_baker *baker,
             total_glyph_count += nk_range_glyph_count(it->range, range_count);
         } while ((it = it->n) != config_iter);
     }
-    /* setup font baker from temporary memory */
+    /* createInstance font baker from temporary memory */
     for (config_iter = config_list; config_iter; config_iter = config_iter->next) {
         it = config_iter;
         do {if (!nk_tt_InitFont(&baker->build[i++].info, (const unsigned char*)it->ttf_blob, 0))
@@ -12714,7 +12714,7 @@ nk_font_bake_pack(struct nk_font_baker *baker,
                     range_count++;
                 }
 
-                /* setup ranges  */
+                /* createInstance ranges  */
                 tmp->ranges = baker->ranges + range_n;
                 tmp->range_count = (nk_rune)range_count;
                 range_n += range_count;
@@ -12786,7 +12786,7 @@ nk_font_bake(struct nk_font_baker *baker, void *image_memory, int width, int hei
         } while ((it = it->n) != config_iter);
     } nk_tt_PackEnd(&baker->spc, &baker->alloc);
 
-    /* third pass: setup font and glyphs */
+    /* third pass: createInstance font and glyphs */
     for (input_i = 0, config_iter = config_list; input_i < font_count && config_iter;
         config_iter = config_iter->next) {
         it = config_iter;
@@ -15576,7 +15576,7 @@ nk_panel_begin(struct nk_context *ctx, const char *title, enum nk_panel_type pan
         }
     }
 
-    /* setup panel */
+    /* createInstance panel */
     layout->type = panel_type;
     layout->flags = win->flags;
     layout->bounds = win->bounds;
@@ -16729,7 +16729,7 @@ nk_popup_begin(struct nk_context *ctx, enum nk_popup_type type,
     rect.x += win->layout->clip.x;
     rect.y += win->layout->clip.y;
 
-    /* setup popup data */
+    /* createInstance popup data */
     popup->parent = win;
     popup->bounds = rect;
     popup->seq = ctx->seq;
@@ -23516,7 +23516,7 @@ nk_do_property(nk_flags *ws,
         }
     }
     if (old != NK_PROPERTY_EDIT && (*state == NK_PROPERTY_EDIT)) {
-        /* property has been activated so setup buffer */
+        /* property has been activated so createInstance buffer */
         NK_MEMCPY(buffer, dst, (nk_size)*length);
         *cursor = nk_utf_len(buffer, *length);
         *len = *length;
@@ -23827,7 +23827,7 @@ nk_chart_begin_colored(struct nk_context *ctx, enum nk_chart_type type,
     chart = &win->layout->chart;
     style = &config->chart;
 
-    /* setup basic generic chart  */
+    /* createInstance basic generic chart  */
     nk_zero(chart, sizeof(*chart));
     chart->x = bounds.x + style->padding.x;
     chart->y = bounds.y + style->padding.y;

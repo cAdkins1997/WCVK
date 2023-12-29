@@ -94,7 +94,7 @@ nk_glfw3_device_upload_atlas(const void *image, int width, int height)
 NK_API void
 nk_glfw3_render(enum nk_anti_aliasing AA)
 {
-    /* setup global state */
+    /* createInstance global state */
     struct nk_glfw_device *dev = &glfw.ogl;
     glPushAttrib(GL_ENABLE_BIT|GL_COLOR_BUFFER_BIT|GL_TRANSFORM_BIT);
     glDisable(GL_CULL_FACE);
@@ -104,7 +104,7 @@ nk_glfw3_render(enum nk_anti_aliasing AA)
     glEnable(GL_TEXTURE_2D);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    /* setup viewport/project */
+    /* createInstance viewport/project */
     glViewport(0,0,(GLsizei)glfw.display_width,(GLsizei)glfw.display_height);
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -153,7 +153,7 @@ nk_glfw3_render(enum nk_anti_aliasing AA)
         nk_buffer_init_default(&ebuf);
         nk_convert(&glfw.ctx, &dev->cmds, &vbuf, &ebuf, &config);
 
-        /* setup vertex buffer pointer */
+        /* createInstance vertex buffer pointer */
         {const void *vertices = nk_buffer_memory_const(&vbuf);
         glVertexPointer(2, GL_FLOAT, vs, (const void*)((const nk_byte*)vertices + vp));
         glTexCoordPointer(2, GL_FLOAT, vs, (const void*)((const nk_byte*)vertices + vt));

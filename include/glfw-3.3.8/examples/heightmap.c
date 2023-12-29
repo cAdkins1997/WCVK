@@ -107,7 +107,7 @@ static GLfloat map_vertices[3][MAP_NUM_TOTAL_VERTICES];
 static GLuint  map_line_indices[2*MAP_NUM_LINES];
 
 /* Store uniform location for the shaders
- * Those values are setup as part of the process of creating
+ * Those values are createInstance as part of the process of creating
  * the shader program. They should not be used before creating
  * the program.
  */
@@ -470,7 +470,7 @@ int main(int argc, char** argv)
     /* Create vao + vbo to store the mesh */
     /* Create the vbo to store all the information for the grid and the height */
 
-    /* setup the scene ready for rendering */
+    /* createInstance the scene ready for rendering */
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
