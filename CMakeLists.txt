@@ -4,13 +4,9 @@ project(OVKL)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(OVKL main.cpp
-        window.h
         common.h
-        vulkan_application.h
         Engine.cpp
         Engine.h
-        Pipeline.cpp
-        Pipeline.h
 )
 
 find_package(Vulkan REQUIRED)
