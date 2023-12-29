@@ -4,11 +4,14 @@
 
 int main() {
     Engine engine;
-    engine.vk_init();
 
-    while (!glfwWindowShouldClose(engine.getWindow())) {
-        glfwPollEvents();
+    try {
+        engine.run();
+    }
+    catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
+        return EXIT_FAILURE;
     }
 
-    engine.cleanUp();
+    return EXIT_SUCCESS;
 }

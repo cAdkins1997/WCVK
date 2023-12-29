@@ -16,6 +16,9 @@
 #include "common.h"
 #include "Pipeline.h"
 
+const uint32_t WIDTH = 1920;
+const uint32_t HEIGHT = 1080;
+
 const std::vector<const char*> validationLayers = {
         "VK_LAYER_KHRONOS_validation"
 };
@@ -52,13 +55,32 @@ void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT
 class Engine {
 
 public:
-    Engine() {
+    Engine() = default;
+
+    void initWindow() {
         glfwInit();
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-        window = glfwCreateWindow(1920, 1080, "OVKL", nullptr, nullptr);
+
+        window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
+    }
+
+    void mainLoop() {
+        while (!glfwWindowShouldClose(window)) {
+            glfwPollEvents();
+            drawFrame();
+        }
+
+        vkDeviceWaitIdle(logicalDevice);
+    }
+
+
+    void run() {
+        initWindow();
+        vk_init();
+        mainLoop();
+        cleanUp();
     }
 
     void vk_init();
@@ -80,7 +102,6 @@ public:
     QueueFamilyIndices findQueueFamilies(VkPhysicalDevice& device);
 
     void createLogicalDevice();
-    std::vector<VkDeviceQueueCreateInfo> createQueueInfo(QueueFamilyIndices& indices);
     bool checkDeviceExtensionSupport(VkPhysicalDevice device);
 
     VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
@@ -91,47 +112,55 @@ public:
     void createSurface();
     void createImageViews();
 
-    void initializePipelines();
-    VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo();
+    static std::vector<char> readFile(const std::string& filename);
+    void createGraphicsPipeline();
+    VkShaderModule createShaderModule(const std::vector<char>& code);
+    bool loadShaderModule(const char* filePath, VkShaderModule* outShaderModule);
 
-    void initCommandPools();
+    void createCommandPool();
+    void createCommandBuffer();
+    void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
 
-    [[nodiscard]] GLFWwindow *getWindow() const {
-        return window;
-    }
+    void createSyncObjects();
 
-    [[nodiscard]] const VkInstance_T *getInstance() const {
-        return instance;
-    }
+    void drawFrame();
 
-private:
-    uint32_t windowWidth, windowHeight;
+    void createFramebuffers();
+    void createRenderPass();
 
+    [[nodiscard]] GLFWwindow *getWindow() const { return window; }
+
+
+public:
     GLFWwindow* window;
 
     VkInstance instance;
     VkDebugUtilsMessengerEXT debugMessenger;
 
     VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-
     VkDevice logicalDevice = VK_NULL_HANDLE;
     VkQueue graphicsQueue = VK_NULL_HANDLE;
 
     VkCommandPool commandPool;
-    VkCommandBuffer mainCommandBuffer;
+    VkCommandBuffer commandBuffer;
 
     VkSurfaceKHR surface;
     VkQueue presentQueue;
 
     VkSwapchainKHR swapChain;
-    VkExtent2D swapChainExtent;
-    VkFormat swapchainImageFormat;
     std::vector<VkImage> swapChainImages;
-    std::vector<VkImageView> swapchainImageViews;
+    VkFormat swapChainImageFormat;
+    VkExtent2D swapChainExtent;
+    std::vector<VkImageView> swapChainImageViews;
+    std::vector<VkFramebuffer> swapChainFramebuffers;
 
-    VkPipelineLayout trianglePipelineLayout;
+    VkPipeline graphicsPipeline;
+    VkPipelineLayout pipelineLayout;
+    VkRenderPass renderPass;
 
-    bool loadShaderModule(const char* filePath, VkShaderModule* outShaderModule);
+    VkSemaphore imageAvailableSemaphore;
+    VkSemaphore renderFinishedSemaphore;
+    VkFence inFlightFence;
 };
 
 
